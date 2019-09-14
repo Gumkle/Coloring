@@ -12,7 +12,13 @@ class Color(models.Model):
 class Image(models.Model):
     title = models.CharField(max_length=120)
     file = models.ImageField(max_length=120, upload_to='images/')
-    colors = models.ManyToManyField(Color, blank=True)
+    colors = models.ManyToManyField(Color, blank=True, through="ColorImage")
+
+
+class ColorImage(models.Model):
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    percentage = models.DecimalField(decimal_places=2, max_digits=3)
 
     def __str__(self):
         return self.title

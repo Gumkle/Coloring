@@ -22,7 +22,8 @@
             <div class="card">
               <div class="card-body text-center d-flex justify-content-center align-items-center flex-column">
                 <p>Wybierz kolor</p>
-                  <form action="">
+                  <form action="{% url 'search' %}" method="POST">
+                      {% csrf_token %}
                       <div class="py-1">
                           <input type="color" name="color">
                       </div>
