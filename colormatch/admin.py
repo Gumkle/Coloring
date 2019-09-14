@@ -6,5 +6,4 @@ class ImageAdmin(admin.ModelAdmin):
     exclude = ('colors',)
 
 
-admin.site.register(Color)
 admin.site.register(Image, ImageAdmin)

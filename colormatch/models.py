@@ -11,8 +11,12 @@ class Color(models.Model):
 
 class Image(models.Model):
     title = models.CharField(max_length=120)
-    file = models.FileField(max_length=120)
+    file = models.ImageField(max_length=120, upload_to='images/')
     colors = models.ManyToManyField(Color, blank=True)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        pass
+        super().save(self, *args, **kwargs)
