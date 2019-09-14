@@ -1,4 +1,5 @@
 import os
+import time
 
 import math
 from PIL import Image
@@ -9,14 +10,25 @@ def get_key(val):
 
 
 def get_color(c):
-    colors = get_colors()
     dist = []
-    for color in colors:
+    for color in get_colors():
         d = math.sqrt((c[1][0] - color[0][0]) ** 2 + (c[1][1] - color[0][1]) ** 2 + (c[1][2] - color[0][2]) ** 2)
         dist.append(d)
     min_of_d = min(dist)
     index = dist.index(min_of_d)
-    return colors[index][1]
+    return get_colors()[index][1]
+
+
+def find_image_by_color(color_name):
+    names = os.listdir("images")
+    ret_names = []
+    for name in names:
+        colors = get_image_colors(name)
+        for i in range(3):
+            if colors[i][1] == color_name:
+                ret_names.append(name)
+
+    return ret_names
 
 
 def get_colors():
@@ -49,14 +61,15 @@ def get_counts(found_colors, pixels):
     return counts
 
 
-if __name__ == '__main__':
-    files = os.listdir("images")
-
-    im = Image.open("images\\" + files[0])
+def get_image_colors(image):
+    print(image)
+    im = Image.open("images\\" + image)
     im = im.convert('RGB')
     width, height = im.size
+    im = im.resize((int(width / 4), int(height / 4)))
+    width, height = im.size
     pixels = width * height
-    print(pixels)
+
     colors = im.getcolors(maxcolors=1000000)
     colors_found = []
     for c in colors:
@@ -65,4 +78,15 @@ if __name__ == '__main__':
             colors_found.append(color)
     colors_found = get_counts(colors_found, pixels)
     colors_found.sort(key=get_key, reverse=True)
-    print(colors_found)
+    return colors_found
+
+
+if __name__ == '__main__':
+    files = os.listdir("images")
+    print(get_image_colors(files[0]))
+
+    start_time = time.time()
+    a = find_image_by_color("teal")
+    elapsed_time = time.time() - start_time
+    print("Time:", elapsed_time)
+    print(len(a))
