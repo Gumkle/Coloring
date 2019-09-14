@@ -45,8 +45,7 @@ def get_counts(found_colors, pixels):
     s = 0
     for i in get_colors():
         s += found_colors.count(i[1])
-        counts.append((found_colors.count(i[1]), i[1]))
-    print(s)
+        counts.append((round(found_colors.count(i[1]) / pixels, 2), i[1]))
     return counts
 
 
@@ -59,12 +58,11 @@ if __name__ == '__main__':
     pixels = width * height
     print(pixels)
     colors = im.getcolors(maxcolors=1000000)
-    colors.sort(key=get_key, reverse=True)
-
     colors_found = []
     for c in colors:
         color = get_color(c)
-        colors_found.append(color)
+        for i in range(c[0]):
+            colors_found.append(color)
     colors_found = get_counts(colors_found, pixels)
     colors_found.sort(key=get_key, reverse=True)
     print(colors_found)
