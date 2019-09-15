@@ -3,6 +3,10 @@ import time
 
 import math
 from PIL import Image
+from colormatch.models import Image as ImageModel, ColorImage
+
+from colormatch.models import Color
+
 
 def get_colors():
     return [
@@ -320,12 +324,22 @@ def get_image_colors(image):
     return colors_found
 
 
-if __name__ == '__main__':
+def seed_relations():
+    # if __name__ == '__main__':
     files = os.listdir("images")
-    print(get_image_colors(files[0]))
+    for filename in files:
+        print(filename)
+        fileModel = ImageModel(title = filename, file=filename)
+        fileModel.save()
+        for color in get_image_colors(filename):
+            colorModel = Color.objects.filter(name=color[1])[0]
+            colorImageModel = ColorImage(color = colorModel, image = fileModel, percentage=color[0])
+            colorImageModel.save()
 
-    # start_time = time.time()
-    # a = find_image_by_color("teal")
-    # elapsed_time = time.time() - start_time
-    # print("Time:", elapsed_time)
-    # print(len(a))
+        # print(get_image_colors(files[0]))
+
+        # start_time = time.time()
+        # a = find_image_by_color("teal")
+        # elapsed_time = time.time() - start_time
+        # print("Time:", elapsed_time)
+        # print(len(a))
